@@ -4,7 +4,7 @@ An in-process x64 Delta Virtual ACARS adapter that corrects A220 engine RPM, fue
 
 ## Download and install
 
-Use the files in [release](release/). Follow the [installation, test and rollback instructions](release/README.md). The adapter wraps your existing stock ACARS FSUIPC bridge; third-party ACARS binaries are not redistributed here.
+Use the files in [release](release/). Follow the [installation, test and rollback instructions](release/README.md). The release includes both the adapter DLL and the unchanged stock FSUIPC bridge, packaged as `A220FSUIPCBridge.bin`. A standard supported ACARS installation and FSUIPC are still required.
 
 ## How it works
 
@@ -24,7 +24,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\build.ps1
 .\build.ps1 -AcarsDirectory 'D:\ACARSv3'
 ```
 
-The script compiles the adapter and runs offline regression checks before updating `release/A220CompatibilityBridge.dll` and its SHA-256 checksum. Local dependency copies, test executables and test results stay in the ignored `build/` directory. No simulator connection or running ACARS session is required for these checks.
+The script compiles the adapter and runs offline regression checks before updating `release/A220CompatibilityBridge.dll` and packages `A220FSUIPCBridge.bin` with SHA-256 checksums for both runtime files. Local dependency copies, test executables and test results stay in the ignored `build/` directory. No simulator connection or running ACARS session is required for these checks.
 
 - `src/`: the validated debugger adapter source, including embedded listener scripts.
 - `tests/`: offline interface, correction, isolation, fallback and delegation regression checks.

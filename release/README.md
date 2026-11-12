@@ -1,13 +1,23 @@
 # Installation and testing
 
-This release contains the debugger-only x64 ACARS adapter. No Community package or separate helper application is needed. FSUIPC7 Free is sufficient. It uses your installed, unchanged ACARS FSUIPC bridge; that third-party binary is not included.
+This release contains the debugger-only x64 ACARS adapter. No Community package or separate helper application is needed. FSUIPC7 Free is sufficient. Both required runtime files are included: `A220CompatibilityBridge.dll` (the adapter) and `A220FSUIPCBridge.bin` (the unchanged stock FSUIPCBridge 3.6.6.1). You still need a standard supported ACARS installation and FSUIPC.
 
 ## Install
 
-1. Close ACARS. Open its installation directory (normally `C:\Program Files\Delta Virtual\ACARSv3`).
-2. For a first installation, rename `FSUIPCBridge.dll` to `A220FSUIPCBridge.bin` in that same directory. Keep a backup of the original outside the ACARS DLL search directory. Windows may require administrator permission. Ensure file extensions are visible.
-3. Copy `A220CompatibilityBridge.dll` from this release into that directory. If updating the earlier tested adapter, rename its `StockFSUIPCBridge.bin` to `A220FSUIPCBridge.bin` before installing the new DLL. If already using the new name, keep that file. Do not replace the stock binary with the adapter. Do not leave another stock `FSUIPCBridge.dll` active alongside the adapter.
+1. Close ACARS. Open its installation directory (normally `C:\Program Files\Delta Virtual\ACARSv3`). Windows may require administrator permission. Ensure file extensions are visible.
+2. Rename the existing `FSUIPCBridge.dll` to `FSUIPCBridge.dll.disabled` to keep it as a backup and prevent ACARS loading it alongside the adapter. If that backup name already exists, keep a separate backup outside this directory before disabling the active DLL.
+3. Copy **both** `A220CompatibilityBridge.dll` and `A220FSUIPCBridge.bin` from this release into the ACARS installation directory. Keep both files together. For an adapter upgrade, replace both files while ACARS is closed; the earlier `StockFSUIPCBridge.bin` is no longer used and can be removed.
 4. Start MSFS, load the Synaptic A220, start FSUIPC, then start ACARS and connect normally. Developer Mode was OFF in the successful test; enabling it is not an installation step.
+
+The final directory should contain these two active adapter files and the disabled original bridge:
+
+```text
+A220CompatibilityBridge.dll
+A220FSUIPCBridge.bin
+FSUIPCBridge.dll.disabled
+```
+
+Do not leave an active `FSUIPCBridge.dll` alongside the adapter. Other ACARS application files stay in place.
 
 No aircraft files are changed. The adapter runs inside ACARS and temporarily subscribes to cockpit telemetry through the simulator's local debugger endpoint.
 
@@ -22,7 +32,7 @@ The filed flight report, rather than the ACARS connection status alone, verifies
 
 ## Roll back
 
-Close ACARS. Remove `A220CompatibilityBridge.dll` and rename `A220FSUIPCBridge.bin` back to `FSUIPCBridge.dll`. If you kept an original backup instead, restore it. Restart ACARS. Do not keep two active simulator bridge DLLs.
+Close ACARS. Remove `A220CompatibilityBridge.dll` and `A220FSUIPCBridge.bin`, then rename your backed-up `FSUIPCBridge.dll.disabled` to `FSUIPCBridge.dll` (or restore your original bridge backup). Restart ACARS. Do not keep two active simulator bridge DLLs.
 
 ## Compatibility
 

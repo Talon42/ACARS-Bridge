@@ -30,8 +30,12 @@ try {
     & $exe
     if ($LASTEXITCODE -ne 0) { throw 'Bridge regression tests failed' }
     Copy-Item -LiteralPath $dll -Destination (Join-Path $release 'A220CompatibilityBridge.dll')
-    $hash = (Get-FileHash -LiteralPath (Join-Path $release 'A220CompatibilityBridge.dll') -Algorithm SHA256).Hash.ToLowerInvariant()
-    [IO.File]::WriteAllText((Join-Path $release 'SHA256SUMS.txt'), "$hash  A220CompatibilityBridge.dll`n")
+    Copy-Item -LiteralPath $stock -Destination (Join-Path $release 'A220FSUIPCBridge.bin')
+    $sums = foreach ($name in @('A220CompatibilityBridge.dll', 'A220FSUIPCBridge.bin')) {
+        $hash = (Get-FileHash -LiteralPath (Join-Path $release $name) -Algorithm SHA256).Hash.ToLowerInvariant()
+        "$hash  $name"
+    }
+    [IO.File]::WriteAllText((Join-Path $release 'SHA256SUMS.txt'), (($sums -join "`n") + "`n"))
     Write-Host 'Build and offline regression tests passed. Release updated.'
 } finally {
     $env:TEMP = $oldTemp
